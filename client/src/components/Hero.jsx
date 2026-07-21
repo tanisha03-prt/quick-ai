@@ -6,7 +6,7 @@ const Hero = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="px-4 sm:px-20 xl:px-32 relative inline-flex flex-col w-full justify-center bg-[url('/gradientBackground.png')] bg-cover bg-no-repeat min-h-screen">
+    <div className="px-4 sm:px-20 xl:px-32 relative inline-flex flex-col w-full justify-center min-h-screen pt-32">
 
       {/* Heading */}
       <div className="text-center mb-6">
@@ -25,13 +25,13 @@ const Hero = () => {
       <div className="flex flex-wrap justify-center gap-4 text-sm">
         <button
           onClick={() => navigate("/ai")}
-          className="bg-primary text-white px-10 py-3 rounded-lg hover:scale-105 transition cursor-pointer"
+          className="bg-primary text-white px-8 py-2.5 rounded-lg hover:scale-105 transition cursor-pointer"
         >
           Start creating now
         </button>
 
         <button
-          className="bg-white px-10 py-3 rounded-lg border border-gray-300 hover:scale-105 transition cursor-pointer"
+          className="bg-white px-8 py-2.5 rounded-lg border border-gray-300 hover:scale-105 transition cursor-pointer"
         >
           Watch demo
         </button>
@@ -42,7 +42,7 @@ const Hero = () => {
         <img
           src={assets.user_group}
           alt="Users"
-          className="h-8"
+          className="h-6"
         />
         <p>Trusted by 10k+ people</p>
       </div>
