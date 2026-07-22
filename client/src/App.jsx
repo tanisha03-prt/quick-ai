@@ -14,18 +14,33 @@ import ReviewResume from "./pages/ReviewResume";
 const App = () => {
   return (
     <Routes>
+      {/* Home */}
       <Route path="/" element={<Home />} />
 
+      {/* AI Dashboard Layout */}
       <Route path="/ai" element={<Layout />}>
         <Route index element={<Dashboard />} />
+
         <Route path="write-article" element={<WriteArticle />} />
         <Route path="blog-titles" element={<BlogTitles />} />
         <Route path="community" element={<Community />} />
         <Route path="generate-images" element={<GenerateImages />} />
-        <Route path="remove-background" element={<RemoveBackground />} />
-        <Route path="remove-object" element={<RemoveObject />} />
-        <Route path="review-resume" element={<ReviewResume />} />
+        <Route
+          path="remove-background"
+          element={<RemoveBackground />}
+        />
+        <Route
+          path="remove-object"
+          element={<RemoveObject />}
+        />
+        <Route
+          path="review-resume"
+          element={<ReviewResume />}
+        />
       </Route>
+
+      {/* Optional fallback */}
+      <Route path="*" element={<Home />} />
     </Routes>
   );
 };
