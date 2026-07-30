@@ -4,7 +4,6 @@ import AiTools from "../components/AiTools";
 import Testimonial from "../components/Testimonial";
 import Plan from "../components/Plan";
 import Footer from "../components/Footer";
-import Sidebar from "../components/Sidebar";
 
 const Home = () => {
   return (
@@ -15,7 +14,6 @@ const Home = () => {
       <Testimonial />
       <Plan />
       <Footer />
-      <Sidebar />
     </>
   );
 };

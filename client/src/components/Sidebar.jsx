@@ -1,25 +1,24 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { useUser, useClerk } from "@clerk/clerk-react";
+import { useClerk, useUser } from "@clerk/clerk-react";
 
 import {
-  LayoutDashboard,
-  Image,
-  Scissors,
-  Eraser,
-  FileText,
-  Users,
+  House,
   SquarePen,
   Hash,
+  Image,
+  Eraser,
+  Scissors,
+  FileText,
+  Users,
   LogOut,
-  X,
 } from "lucide-react";
 
 const navItems = [
   {
     to: "/ai",
     label: "Dashboard",
-    icon: LayoutDashboard,
+    icon: House,
   },
   {
     to: "/ai/write-article",
@@ -39,12 +38,12 @@ const navItems = [
   {
     to: "/ai/remove-background",
     label: "Remove Background",
-    icon: Scissors,
+    icon: Eraser,
   },
   {
     to: "/ai/remove-object",
     label: "Remove Object",
-    icon: Eraser,
+    icon: Scissors,
   },
   {
     to: "/ai/review-resume",
@@ -58,93 +57,102 @@ const navItems = [
   },
 ];
 
-const Sidebar = ({ sidebar, setSidebar }) => {
-  const { user } = useUser();
+const Sidebar = ({ setSidebar }) => {
+  const { isLoaded, user } = useUser();
   const { signOut, openUserProfile } = useClerk();
 
+  if (!isLoaded) {
+    return (
+      <div className="w-60 min-w-60 bg-white border-r border-gray-200">
+        Loading...
+      </div>
+    );
+  }
+
   return (
-    <aside
-      className={`w-60 bg-white border-r border-gray-200 flex flex-col justify-between transition-all duration-300
+    <div className="w-60 min-w-60 h-full bg-white border-r border-gray-200 flex flex-col">
 
-      max-sm:fixed
-      max-sm:top-14
-      max-sm:bottom-0
-      max-sm:left-0
-      max-sm:z-50
+      {/* Top Section */}
 
-      ${
-        sidebar
-          ? "translate-x-0"
-          : "max-sm:-translate-x-full"
-      }`}
-    >
-      <div>
-        {/* User */}
+      <div className="flex-1 overflow-y-auto p-6">
 
-        <div className="py-7 border-b relative">
+        <img
+          src={user?.imageUrl}
+          alt="Profile"
+          className="w-16 h-16 rounded-full mx-auto object-cover"
+        />
 
+        <h2 className="mt-3 text-center text-xl font-bold text-gray-800">
+          {user?.fullName}
+        </h2>
+
+        <div className="mt-8 flex flex-col gap-2">
+
+          {navItems.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === "/ai"}
+                onClick={() => setSidebar?.(false)}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                    isActive
+                      ? "bg-gradient-to-r from-[#3C81F6] to-[#9234EA] text-white shadow"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`
+                }
+              >
+                <Icon size={20} />
+                <span className="font-medium">{item.label}</span>
+              </NavLink>
+            );
+          })}
+
+        </div>
+
+      </div>
+
+      {/* Bottom Section */}
+
+      <div className="border-t border-gray-200 p-4 shrink-0">
+
+        <div
+          onClick={openUserProfile}
+          className="flex items-center gap-3 cursor-pointer"
+        >
           <img
             src={user?.imageUrl}
-            alt="avatar"
-            onClick={openUserProfile}
-            className="w-16 h-16 rounded-full mx-auto cursor-pointer object-cover"
+            alt="Profile"
+            className="w-10 h-10 rounded-full object-cover"
           />
 
-          <h2 className="text-center font-semibold mt-2">
-            {user?.fullName}
-          </h2>
+          <div className="flex-1">
+            <p className="font-semibold text-gray-800">
+              {user?.fullName}
+            </p>
 
-          <X
-            className="sm:hidden absolute right-4 top-4 cursor-pointer"
-            onClick={() => setSidebar(false)}
+            <p className="text-sm text-gray-500">
+              Free Plan
+            </p>
+          </div>
+
+          <LogOut
+            size={18}
+            className="cursor-pointer text-gray-500 hover:text-red-500"
+            onClick={(e) => {
+              e.stopPropagation();
+              signOut();
+            }}
           />
+
         </div>
 
-        {/* Navigation */}
-
-        <div className="px-2 py-4">
-
-          {navItems.map(({ to, label, icon: Icon }) => (
-
-            <NavLink
-              key={to}
-              to={to}
-              end={to === "/ai"}
-              onClick={() => setSidebar(false)}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-lg mb-2 transition
-
-                ${
-                  isActive
-                    ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white"
-                    : "text-gray-700 hover:bg-gray-100"
-                }`
-              }
-            >
-              <Icon size={20} />
-
-              <span>{label}</span>
-
-            </NavLink>
-          ))}
-        </div>
       </div>
 
-      {/* Logout */}
-
-      <div className="p-4 border-t">
-
-        <button
-          onClick={() => signOut()}
-          className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white rounded-lg py-3"
-        >
-          <LogOut size={18} />
-
-          Logout
-        </button>
-
-      </div>
-    </aside>
+    </div>
   );
 };
 
