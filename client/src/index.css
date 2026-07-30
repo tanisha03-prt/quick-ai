@@ -20,3 +20,9 @@ body{
   --color-dark: #0B1120;
   --color-card: #111827;
 }
+.reset-tw, .reset-tw *{
+  all: revert !important;
+}
+.cl-drawerRoot{
+  z-index: 10;
+}
