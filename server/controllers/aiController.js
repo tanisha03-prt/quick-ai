@@ -1,8 +1,10 @@
 import ai from "../utils/gemini.js";
+import { InferenceClient } from "@huggingface/inference";
 
-// ==========================
-// Blog Titles Controller
-// ==========================
+// ======================================
+// BLOG TITLES
+// ======================================
+
 export const writeBlogTitles = async (req, res) => {
   try {
     const { topic } = req.body;
@@ -18,20 +20,18 @@ Requirements:
 `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.0-flash",
       contents: prompt,
     });
 
     const titles = response.text
       .split("\n")
-      .filter((title) => title.trim() !== "")
-      .map((title) => title.replace(/^\d+\.\s*/, ""));
+      .filter((title) => title.trim() !== "");
 
     return res.json({
       success: true,
       titles,
     });
-
   } catch (error) {
     console.log("Blog Title Error:", error);
 
@@ -42,9 +42,10 @@ Requirements:
   }
 };
 
-// ==========================
-// Write Article Controller
-// ==========================
+// ======================================
+// WRITE ARTICLE
+// ======================================
+
 export const writeArticle = async (req, res) => {
   try {
     const { topic, length } = req.body;
@@ -72,13 +73,51 @@ Requirements:
       success: true,
       article: response.text,
     });
-
   } catch (error) {
     console.log("Article Error:", error);
 
     return res.status(500).json({
       success: false,
       message: error.message,
+    });
+  }
+};
+
+// ======================================
+// GENERATE IMAGE
+// ======================================
+
+export const generateImage = async (req, res) => {
+  try {
+    const { prompt } = req.body;
+
+    const client = new InferenceClient(
+      process.env.HUGGINGFACE_API_KEY
+    );
+
+    const imageBlob = await client.textToImage({
+      model: "black-forest-labs/FLUX.1-dev",
+      inputs: prompt,
+    });
+
+    const buffer = Buffer.from(await imageBlob.arrayBuffer());
+
+    const imageBase64 = buffer.toString("base64");
+
+    return res.json({
+      success: true,
+      image: `data:image/png;base64,${imageBase64}`,
+    });
+
+  } catch (error) {
+    console.log(
+      "Generate Image Error:",
+      error?.message || error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message: error?.message || "Image generation failed",
     });
   }
 };
