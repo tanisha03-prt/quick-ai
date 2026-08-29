@@ -1,5 +1,12 @@
-import { useState } from "react";
-import { Sparkles, Hash, Loader2, Copy, Check } from "lucide-react";
+import { useContext, useState } from "react";
+import { AppContext } from "../context/AppContext";
+import {
+  Sparkles,
+  Hash,
+  Loader2,
+  Copy,
+  Check,
+} from "lucide-react";
 
 const categories = [
   "General",
@@ -13,6 +20,8 @@ const categories = [
 ];
 
 export default function BlogTitles() {
+  const { axios } = useContext(AppContext);
+
   const [keyword, setKeyword] = useState("");
   const [category, setCategory] = useState("General");
   const [loading, setLoading] = useState(false);
@@ -24,30 +33,35 @@ export default function BlogTitles() {
 
     if (!keyword.trim()) return;
 
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    // Replace with backend later
-    setTimeout(() => {
-      setTitles([
-        `10 Amazing ${keyword} Trends in ${category}`,
-        `Complete Guide to ${keyword} for Beginners`,
-        `Why ${keyword} Will Change ${category} Forever`,
-        `${keyword}: Everything You Need to Know`,
-        `Top ${keyword} Tips Every Beginner Should Learn`,
-        `How to Master ${keyword} Step by Step`,
-        `${keyword} Mistakes You Should Avoid`,
-        `The Future of ${keyword} in ${category}`,
-      ]);
+      const { data } = await axios.post("/api/ai/blog-titles", {
+        topic: `${keyword} (${category})`,
+      });
 
+      if (data.success) {
+        // Backend already returns an ARRAY
+        setTitles(data.titles);
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      alert(error.response?.data?.message || error.message);
+    } finally {
       setLoading(false);
-    }, 1800);
+    }
   };
 
   const copyTitle = async (title) => {
     await navigator.clipboard.writeText(title);
+
     setCopied(title);
 
-    setTimeout(() => setCopied(""), 1500);
+    setTimeout(() => {
+      setCopied("");
+    }, 1500);
   };
 
   return (
@@ -87,9 +101,7 @@ export default function BlogTitles() {
               key={item}
               type="button"
               onClick={() => setCategory(item)}
-              className={`px-4 py-2 rounded-full border text-sm transition
-
-              ${
+              className={`px-4 py-2 rounded-full border text-sm transition ${
                 category === item
                   ? "bg-violet-100 border-violet-500 text-violet-700"
                   : "border-slate-300 hover:bg-slate-100"
@@ -102,7 +114,7 @@ export default function BlogTitles() {
 
         <button
           disabled={loading}
-          className="mt-8 w-full rounded-xl bg-gradient-to-r from-violet-600 to-indigo-500 text-white py-3 flex justify-center items-center gap-2 hover:opacity-95 transition"
+          className="mt-8 w-full rounded-xl bg-gradient-to-r from-violet-600 to-indigo-500 text-white py-3 flex justify-center items-center gap-2"
         >
           {loading ? (
             <>
@@ -136,9 +148,7 @@ export default function BlogTitles() {
 
               <Hash size={50} className="mx-auto mb-4" />
 
-              <p>
-                Enter a keyword and generate
-              </p>
+              <p>Enter a keyword and generate</p>
 
               <p className="font-semibold">
                 AI Blog Titles
@@ -162,8 +172,8 @@ export default function BlogTitles() {
                   </p>
 
                   <button
-                    onClick={() => copyTitle(title)}
                     type="button"
+                    onClick={() => copyTitle(title)}
                     className="text-violet-600"
                   >
                     {copied === title ? (
@@ -180,6 +190,7 @@ export default function BlogTitles() {
           </div>
         )}
       </div>
+
     </div>
   );
 }
