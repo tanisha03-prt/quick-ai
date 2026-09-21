@@ -1,5 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Sparkles, Gem } from "lucide-react";
+import {
+  Sparkles,
+  Gem,
+  CreditCard,
+  ArrowUpRight,
+  Clock3,
+} from "lucide-react";
 import { Protect } from "@clerk/clerk-react";
 
 import { dummyCreationData } from "../assets/assets";
@@ -20,94 +26,292 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="h-full overflow-y-auto p-6">
+    <div className="h-full overflow-y-auto p-4">
 
-      {/* Welcome */}
+      {/* ================= WELCOME ================= */}
 
-      <h1 className="text-3xl font-bold text-slate-800 mb-1">
-        Welcome, {userData?.name || "User"} 👋
-      </h1>
+      <div className="mb-4">
 
-      <p className="text-slate-500 mb-6">
-        {userData?.email}
-      </p>
+        <div className="flex items-center gap-1.5">
 
-      {/* Cards */}
+          <h1 className="text-xl font-bold text-slate-800">
+            Welcome, {userData?.name || "User"}
+          </h1>
 
-      <div className="flex justify-start gap-4 flex-wrap">
+          <span className="text-base">
+            👋
+          </span>
+
+        </div>
+
+        <p className="mt-0.5 text-[10px] text-slate-400">
+          {userData?.email}
+        </p>
+
+      </div>
+
+      {/* ================= STATS ================= */}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5">
 
         {/* Total Creations */}
 
-        <div className="flex justify-between items-center w-72 p-4 px-6 bg-white rounded-xl border border-gray-200">
+        <div className="
+          group
+          flex
+          items-center
+          justify-between
+          rounded-lg
+          border
+          border-slate-200
+          bg-white
+          px-3
+          py-2.5
+          transition-all
+          duration-200
+          hover:-translate-y-0.5
+          hover:border-violet-200
+          hover:shadow-sm
+        ">
 
-          <div className="text-slate-600">
-            <p className="text-sm">Total Creations</p>
+          <div>
 
-            <h2 className="text-xl font-semibold">
+            <div className="flex items-center gap-1 text-[10px] text-slate-500">
+              <Clock3 size={11} />
+              Total Creations
+            </div>
+
+            <h2 className="mt-0.5 text-lg font-bold text-slate-800">
               {creations.length}
             </h2>
+
           </div>
 
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#3588F2] to-[#0BB0D7] text-white flex justify-center items-center">
-            <Sparkles className="w-5 h-5" />
+          <div className="
+            flex
+            h-8
+            w-8
+            items-center
+            justify-center
+            rounded-md
+            bg-gradient-to-br
+            from-violet-500
+            to-indigo-500
+            text-white
+          ">
+            <Sparkles size={15} />
           </div>
 
         </div>
 
-        {/* Credits */}
+        {/* Available Credits */}
 
-        <div className="flex justify-between items-center w-72 p-4 px-6 bg-white rounded-xl border border-gray-200">
+        <div className="
+          group
+          flex
+          items-center
+          justify-between
+          rounded-lg
+          border
+          border-slate-200
+          bg-white
+          px-3
+          py-2.5
+          transition-all
+          duration-200
+          hover:-translate-y-0.5
+          hover:border-cyan-200
+          hover:shadow-sm
+        ">
 
-          <div className="text-slate-600">
-            <p className="text-sm">Available Credits</p>
+          <div>
 
-            <h2 className="text-xl font-semibold">
+            <div className="flex items-center gap-1 text-[10px] text-slate-500">
+              <CreditCard size={11} />
+              Available Credits
+            </div>
+
+            <h2 className="mt-0.5 text-lg font-bold text-slate-800">
               {userData?.credits ?? 0}
             </h2>
+
           </div>
 
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-400 to-orange-500 text-white flex justify-center items-center">
-            💰
+          <div className="
+            flex
+            h-8
+            w-8
+            items-center
+            justify-center
+            rounded-md
+            bg-gradient-to-br
+            from-cyan-500
+            to-blue-500
+            text-white
+          ">
+            <CreditCard size={15} />
           </div>
 
         </div>
 
         {/* Active Plan */}
 
-        <div className="flex justify-between items-center w-72 p-4 px-6 bg-white rounded-xl border border-gray-200">
+        <div className="
+          group
+          flex
+          items-center
+          justify-between
+          rounded-lg
+          border
+          border-slate-200
+          bg-white
+          px-3
+          py-2.5
+          transition-all
+          duration-200
+          hover:-translate-y-0.5
+          hover:border-pink-200
+          hover:shadow-sm
+        ">
 
-          <div className="text-slate-600">
-            <p className="text-sm">Active Plan</p>
+          <div>
 
-            <h2 className="text-xl font-semibold">
+            <div className="flex items-center gap-1 text-[10px] text-slate-500">
+              <Gem size={11} />
+              Active Plan
+            </div>
+
+            <h2 className="mt-0.5 text-lg font-bold text-slate-800">
               <Protect plan="premium" fallback="Free">
                 Premium
               </Protect>
             </h2>
+
           </div>
 
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#FF61C5] to-[#9E53EE] text-white flex justify-center items-center">
-            <Gem className="w-5 h-5" />
+          <div className="
+            flex
+            h-8
+            w-8
+            items-center
+            justify-center
+            rounded-md
+            bg-gradient-to-br
+            from-pink-500
+            to-violet-500
+            text-white
+          ">
+            <Gem size={15} />
           </div>
 
         </div>
 
       </div>
 
-      {/* Recent Creations */}
+      {/* ================= RECENT CREATIONS ================= */}
 
-      <div className="space-y-3">
+      <div className="mt-6">
 
-        <p className="mt-8 mb-4 text-lg font-medium text-slate-800">
-          Recent Creations
-        </p>
+        {/* Section Header */}
 
-        {creations.map((item) => (
-          <CreationItem
-            key={item.id}
-            item={item}
-          />
-        ))}
+        <div className="mb-2.5 flex items-center justify-between">
+
+          <div>
+
+            <div className="flex items-center gap-1.5">
+
+              <div className="
+                flex
+                h-6
+                w-6
+                items-center
+                justify-center
+                rounded-md
+                bg-violet-100
+                text-violet-600
+              ">
+                <Sparkles size={12} />
+              </div>
+
+              <h2 className="text-sm font-bold text-slate-800">
+                Recent Creations
+              </h2>
+
+            </div>
+
+            <p className="mt-0.5 ml-7.5 text-[9px] text-slate-400">
+              Your latest AI-generated content
+            </p>
+
+          </div>
+
+          {creations.length > 0 && (
+            <button
+              type="button"
+              className="
+                flex
+                items-center
+                gap-0.5
+                rounded-md
+                px-1.5
+                py-1
+                text-[10px]
+                font-medium
+                text-violet-600
+                transition
+                hover:bg-violet-50
+              "
+            >
+              View All
+              <ArrowUpRight size={11} />
+            </button>
+          )}
+
+        </div>
+
+        {/* Creation List */}
+
+        <div className="space-y-1.5">
+
+          {creations.length > 0 ? (
+
+            creations.map((item) => (
+              <CreationItem
+                key={item.id}
+                item={item}
+              />
+            ))
+
+          ) : (
+
+            <div className="
+              rounded-lg
+              border
+              border-dashed
+              border-slate-300
+              bg-white
+              p-6
+              text-center
+            ">
+
+              <Sparkles
+                size={26}
+                className="mx-auto text-slate-300"
+              />
+
+              <p className="mt-2 text-xs font-medium text-slate-600">
+                No creations yet
+              </p>
+
+              <p className="mt-0.5 text-[10px] text-slate-400">
+                Start creating something with AI.
+              </p>
+
+            </div>
+
+          )}
+
+        </div>
 
       </div>
 
